@@ -1,0 +1,108 @@
+---
+title: "Econ HW"
+author: "Julia Dagum"
+date: "5/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+library(tidyverse)
+library(janitor)
+library(tidyr)
+library(stargazer)
+library(dplyr)
+
+```
+
+Plot Data
+```{r}
+
+# Load data
+hw3_data <- read_csv("homework_3_data.csv") %>%
+  clean_names()
+
+hw3_tidy <- pivot_longer(data = hw3_data, cols = q_low_gallons:q_high_gallons, names_to = "income", values_to = "quantity")
+
+#-------------------------------
+# Plot data
+#-------------------------------
+ggplot(data = hw3_tidy, aes(x = quantity, y = price_dollars)) +
+  geom_point(aes(color = income)) +
+  theme_minimal()
+
+```
+Linear Regressions
+```{r}
+#-------------------------------
+# separate data sets by income
+#-------------------------------
+income_high <- hw3_tidy %>%
+  filter(income == "q_high_gallons") %>%
+  select(price_dollars, quantity)
+
+income_low <- hw3_tidy %>%
+  filter(income == "q_low_gallons") %>%
+  select(price_dollars, quantity)
+
+#-------------------------------
+# linear regressions by income
+#-------------------------------
+lm_high <- lm(price_dollars ~ quantity, data = income_high)
+summary(lm_high)
+
+lm_low <- lm(price_dollars ~ quantity, data = income_low)
+summary(lm_low)
+
+```
+Graph demand lines based on the lm models
+```{r}
+
+reg <- ggplot()+
+  geom_point(data = hw3_tidy, 
+             aes(x = quantity, y = price_dollars, color = income), 
+             show.legend = FALSE) +
+  geom_abline(data = hw3_tidy, 
+              aes(x = quantity, y = price_dollars, color = income),
+              intercept = lm_high$coefficients[1],
+              slope = lm_high$coefficients[2],
+              color = "coral2") +
+  geom_abline(data = hw3_tidy, aes(x = quantity, y = price_dollars, color = income),
+              intercept = lm_low$coefficients[1],
+              slope = lm_low$coefficients[2],
+              color = "deepskyblue2") +
+  theme_minimal() +
+  labs(x = "Quantity (Gallons)",
+       y = "Price ($/gallon)") +
+  annotate("text", 
+           label = "Low Income", 
+           x = 1.5e+05, 
+           y = 7.5, 
+           color = "deepskyblue2") +
+  annotate("text", 
+           label = "Equation: p = 11.669 - 0.00006611q", 
+           x = 1.5e+05, 
+           y = 7, 
+           color = "deepskyblue2") +
+  annotate("text", 
+           label = "High Income", 
+           x = 4.5e+05, 
+           y = 7.5, 
+           color = "coral2") +
+  annotate("text", 
+           label = "Equation: p = 15.8 - 0.00002731q", 
+           x = 4.5e+05, 
+           y = 7, 
+           color = "coral2")
+
+reg +
+  geom_abline(intercept = 5, slope = .00007)
+
+ggsave("hw3_initialgraph.png")
+
+
+```
