@@ -62,7 +62,7 @@ summary(lm_low)
 Graph demand lines based on the lm models
 ```{r}
 
-reg <- ggplot()+
+regressions <- ggplot()+
   geom_point(data = hw3_tidy, 
              aes(x = quantity, y = price_dollars, color = income), 
              show.legend = FALSE) +
@@ -97,10 +97,12 @@ reg <- ggplot()+
            label = "Equation: p = 15.8 - 0.00002731q", 
            x = 4.5e+05, 
            y = 7, 
-           color = "coral2")
+           color = "coral2") + 
+  ylim(0, 16) +
+  xlim(0, 400000) # for some reason seems like this isn't working
 
-reg +
-  geom_abline(intercept = 5, slope = .00007)
+regressions +
+  geom_abline(intercept = 14.5923613, slope = - 0.00003865)
 
 ggsave("hw3_initialgraph.png")
 
