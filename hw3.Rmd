@@ -99,10 +99,12 @@ regressions <- ggplot()+
            y = 7, 
            color = "coral2") + 
   ylim(0, 16) +
-  xlim(0, 400000) # for some reason seems like this isn't working
+  xlim(0, 800000) # for some reason seems like this isn't working
 
 regressions +
-  geom_abline(intercept = 14.5923613, slope = - 0.00003865)
+  geom_abline(intercept = 14.5923613, slope = - 0.00001933) +
+  geom_abline(intercept = 0, slope = 0.000005) +
+  geom_abline(aes(linetype = "dashed"), intercept = 3, slope = 0)
 
 ggsave("hw3_initialgraph.png")
 
