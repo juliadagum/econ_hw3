@@ -115,7 +115,7 @@ Make graph for welfare effects of different tax scenarios
 ```{r}
 welfare <- read_csv("econ_hw3.csv") %>% 
   clean_names()
-
+require(scales)
 ggplot(data = welfare) +
   geom_point(aes(x = tax, y = welfare_low, color = "Low Income Consumers")) +
   geom_line(aes(x = tax, y = welfare_low, color = "Low Income Consumers")) +
@@ -125,7 +125,9 @@ ggplot(data = welfare) +
   geom_line(aes(x = tax, y = welfare_for_producers, color = "Gas Producers")) +
   theme_minimal() +
   labs(x = "Tax ($/gallon)", 
-       y = "Welfare Effects")
+       y = "Welfare Effects", 
+       color = "Group") +
+  scale_y_continuous(labels = comma)
 ```
 
 
