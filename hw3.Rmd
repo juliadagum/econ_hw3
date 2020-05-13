@@ -123,11 +123,29 @@ ggplot(data = welfare) +
   geom_line(aes(x = tax, y = welfare_high, color = "High Income Consumers")) +
   geom_point(aes(x = tax, y = welfare_for_producers, color = "Gas Producers")) +
   geom_line(aes(x = tax, y = welfare_for_producers, color = "Gas Producers")) +
+  geom_point(aes(x = tax, y = local_environmental_externality, color = "Externality")) +
+  geom_line(aes(x = tax, y = local_environmental_externality, color = "Externality")) +
   theme_minimal() +
   labs(x = "Tax ($/gallon)", 
        y = "Welfare Effects", 
        color = "Group") +
   scale_y_continuous(labels = comma)
+
+ggsave("welfare_graph.png")
 ```
 
+Find where EV technology and gas tax would break even: 
+
+```{r}
+
+ggplot() +
+  geom_abline(aes(intercept = 0, slope = .000005, color = "Supply")) +
+  geom_abline(aes(intercept = 7.29618, slope = - .00001933, color = "Demand with EV technology")) +
+  geom_abline(aes(intercept = 14.592, slope =  - 0.00001933, color = "Original Demand")) +
+  geom_vline(aes(xintercept = 299884, color = "Quantity consumed with EV technology")) +
+  theme_minimal() +
+  ylim(0, 16) +
+  xlim(0, 800000)
+
+```
 
