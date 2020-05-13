@@ -108,5 +108,24 @@ regressions +
 
 ggsave("hw3_initialgraph.png")
 
-
 ```
+
+Make graph for welfare effects of different tax scenarios
+
+```{r}
+welfare <- read_csv("econ_hw3.csv") %>% 
+  clean_names()
+
+ggplot(data = welfare) +
+  geom_point(aes(x = tax, y = welfare_low, color = "Low Income Consumers")) +
+  geom_line(aes(x = tax, y = welfare_low, color = "Low Income Consumers")) +
+  geom_point(aes(x = tax, y = welfare_high, color = "High Income Consumers")) +
+  geom_line(aes(x = tax, y = welfare_high, color = "High Income Consumers")) +
+  geom_point(aes(x = tax, y = welfare_for_producers, color = "Gas Producers")) +
+  geom_line(aes(x = tax, y = welfare_for_producers, color = "Gas Producers")) +
+  theme_minimal() +
+  labs(x = "Tax ($/gallon)", 
+       y = "Welfare Effects")
+```
+
+
